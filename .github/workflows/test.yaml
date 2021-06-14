@@ -1,0 +1,33 @@
+name: actions-test
+
+on:
+  push
+  
+jobs:
+  print-hello:
+    runs-on: ubuntu-latest
+    steps:
+
+      - id: 'zero'
+        run: echo "${{ github.actor }}"
+
+      - id: 'one'
+        run: echo "Running because of 'github.actor' contains a 'setevoy' string"
+        if: "contains(github.actor, 'setevoy')"
+
+      # this will not run
+      - id: 'two'
+        run: echo "Skipping because of 'github.actor' contains a 'setevoy' string"
+        if: "!contains(github.actor, 'setevoy')"
+
+      - id: 'three'
+        run: echo "Running because of Step Two was skipped"
+        if: steps.two.conclusion == 'skipped'
+
+      - id: 'four'
+        run: echo "Running because of commit message was '${{ github.event.commits[0].message }}'"
+        if: contains(github.event.commits[0].message, 'if set')
+
+      - id: 'five'
+        run: echo "Running because of previous Step was successful and the trigger event was 'push'"
+        if: success() && github.event_name == 'push'

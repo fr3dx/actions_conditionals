@@ -7,6 +7,7 @@ jobs:
   print-hello:
     runs-on: ubuntu-latest
     steps:
+      - run: docker --version
 
       - id: 'zero'
         run: echo "${{ github.actor }}"
